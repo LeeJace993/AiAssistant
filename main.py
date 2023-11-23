@@ -19,7 +19,7 @@ import os
 import detact_run
 from PIL import Image
 #请输入你的OPENAI_API_KEY
-OPENAI_API_KEY=''
+#OPENAI_API_KEY=''
 os.environ['OPENAI_API_KEY']=OPENAI_API_KEY
 
 template1="""
