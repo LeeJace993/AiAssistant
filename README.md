@@ -3,6 +3,7 @@
 * 健康状态分析：通过建立COT以及Template训练OpenAI LLM模型，根据本地database中的人体各项健康指标.docx文件建立Chroma向量数据库。利用本地向量数据库回答用户输入Query
 * 问题咨询:通过建立COT以及Template训练OpenAI LLM模型，根据本地database中的AI_assistant.docx文件建立Chroma向量数据库。利用本地向量数据库回答用户输入Query
 * 舌部诊断:通过Unet网络训练提取出舌头的语义类别，再通过支持向量机的方法训练舌部颜色识别模型，模型返回舌苔以及舌质的颜色。最终将获取的结果输入OpenAI LLM模型实现舌部诊断。
+* Streamlit 访问：浏览器输入 https://aiassistant-tsinghua.streamlit.app/ 即可访问
 # 使用方法
 ## 1.安装项目依赖
 `pip install -r requirements.txt`
