@@ -24,9 +24,9 @@ import detact_run
 from PIL import Image
 
 import nltk
-for pkg in ['punkt', 'punkt_tab']:
+for pkg in ['punkt', 'punkt_tab', 'averaged_perceptron_tagger_eng']:
     try:
-        nltk.data.find(f'tokenizers/{pkg}')
+        nltk.data.find(f'tokenizers/{pkg}') if "punkt" in pkg else nltk.data.find(f'taggers/{pkg}')
     except LookupError:
         nltk.download(pkg)
 
