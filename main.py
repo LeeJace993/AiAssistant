@@ -22,6 +22,14 @@ from keras.preprocessing import image
 import os
 import detact_run
 from PIL import Image
+
+import nltk
+for pkg in ['punkt', 'punkt_tab']:
+    try:
+        nltk.data.find(f'tokenizers/{pkg}')
+    except LookupError:
+        nltk.download(pkg)
+
 #请输入你的OPENAI_API_KEY
 OPENAI_API_KEY = st.secrets["OPENAI_API_KEY"]
 #OPENAI_API_KEY=os.environ.get("OPENAI_API_KEY")
