@@ -10,6 +10,8 @@ from langchain.document_loaders import DirectoryLoader
 from langchain.document_loaders import Docx2txtLoader
 from langchain.document_loaders import UnstructuredWordDocumentLoader
 import streamlit as st
+st.set_page_config(page_title="老年智能助手",page_icon=":robot:")
+st.header("老年智能助手")
 import openai
 
 
@@ -35,11 +37,6 @@ OPENAI_API_KEY = st.secrets["OPENAI_API_KEY"]
 #OPENAI_API_KEY=os.environ.get("OPENAI_API_KEY")
 os.environ["OPENAI_API_KEY"] = OPENAI_API_KEY
 
-# 检查是否加载成功
-if not OPENAI_API_KEY:
-    st.error("⚠️ 未检测到 OpenAI API Key，请检查 Streamlit Secrets 设置！")
-else:
-    st.success("✅ 成功加载 OpenAI API Key！")
 template1="""
     你是一名老年人的健康助手，负责给你的用户提供一些健康相关的建议。
     接下来会有四个种类的问题，分别是健康建议、医疗信息、紧急救助和心理健康。
@@ -193,8 +190,6 @@ qa2 = VectorDBQA.from_chain_type(
 
 
 
-st.set_page_config(page_title="老年智能助手",page_icon=":robot:")
-st.header("老年智能助手")
 col1,col2=st.columns(2)
 
 with col1:
