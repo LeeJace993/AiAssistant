@@ -1,7 +1,13 @@
 from langchain.embeddings.openai import OpenAIEmbeddings
 from langchain.vectorstores import Chroma
 from langchain.text_splitter import CharacterTextSplitter
-from langchain import OpenAI, VectorDBQA,PromptTemplate
+## from langchain import OpenAI, VectorDBQA,PromptTemplate
+from langchain_community.llms import OpenAI
+from langchain.chains import VectorDBQA
+from langchain.prompts import PromptTemplate
+from langchain.chat_models import ChatOpenAI
+
+
 from langchain.document_loaders import DirectoryLoader
 from langchain.document_loaders import Docx2txtLoader
 from langchain.document_loaders import UnstructuredWordDocumentLoader
@@ -65,11 +71,15 @@ template2="""
 血脂{blood_fat}3.7mmol/L
 """
 def load_LLM():
-    """Logic for loading the chain you want to use should go here."""
-    llm = OpenAI(temperature=0.5)
-    template=template1
+    """加载大语言模型"""
+    llm = ChatOpenAI(
+        model_name="gpt-3.5-turbo",
+        temperature=0.5,
+        openai_api_key=os.environ["OPENAI_API_KEY"]
+    )
+    return llm
     # COT prompt for diabetes-related advice - divided into smaller parts
-    cot_part1 = """
+cot_part1 = """
 1、提问：我是一名糖尿症患者，我在日常生活中有哪些需要注意的事情？
 回答：因为你是一名糖尿症患者，我会根据健康建议、医疗信息、紧急救助和心理健康四个方面给出我的回答。
 首先是健康建议：
@@ -93,7 +103,7 @@ def load_LLM():
 
     """
 
-    cot_part2 = """
+cot_part2 = """
         提问：我应该如何定制一个适合糖尿病患者的健康的一日三餐食谱？
 回答：
 定制适合糖尿病患者的一日三餐食谱时，需要遵循以下原则：
@@ -126,9 +136,11 @@ def load_LLM():
 
 
     # Combine the smaller parts of COT with your large language model
-    combined_prompt = f"{template}\n{cot_part1}\n{cot_part2}\n{llm}"
-
-    return combined_prompt
+combined_prompt = f"{template1}\n{cot_part1}\n{cot_part2}"
+prompt1 = PromptTemplate(
+    input_variables=["type"],
+    template=combined_prompt
+)
 # 加载您的大型语言模型
 llm=load_LLM()
 loader1 = UnstructuredWordDocumentLoader("./database/AI_assistant.docx")
@@ -137,7 +149,11 @@ text_splitter=CharacterTextSplitter(chunk_size=1000,chunk_overlap=0)
 texts=text_splitter.split_documents(document1)
 embeddings1=OpenAIEmbeddings(openai_api_key=os.environ['OPENAI_API_KEY'])
 docsearch1=Chroma.from_documents(texts,embeddings1) # TO  create a Vectorbase
-qa1=VectorDBQA.from_chain_type(llm=OpenAI(),chain_type='refine',vectorstore=docsearch1)
+qa1 = VectorDBQA.from_chain_type(
+    llm=llm,                   # 用你上面刚加载好的 ChatOpenAI 对象
+    chain_type='refine',
+    vectorstore=docsearch1
+)
 
 prompt1=PromptTemplate(
     input_variables=["type"],
@@ -148,8 +164,12 @@ prompt2=PromptTemplate(
     template=template2,
 )
 def load_LLM2():
-    """Logic for liading the chain you want to use should go here."""
-    llm=OpenAI(temperature=0.5)
+    """加载第二个语言模型"""
+    llm = ChatOpenAI(
+        model_name="gpt-3.5-turbo",
+        temperature=0.5,
+        openai_api_key=os.environ["OPENAI_API_KEY"]
+    )
     return llm
 
 llm=load_LLM2()
@@ -159,7 +179,11 @@ text_splitter=CharacterTextSplitter(chunk_size=1000,chunk_overlap=0)
 texts=text_splitter.split_documents(document2)
 embeddings2=OpenAIEmbeddings(openai_api_key=os.environ['OPENAI_API_KEY'])
 docsearch2=Chroma.from_documents(texts,embeddings2) # TO  create a Vectorbase
-qa2=VectorDBQA.from_chain_type(llm=OpenAI(),chain_type='refine',vectorstore=docsearch2)
+qa2 = VectorDBQA.from_chain_type(
+    llm=llm, 
+    chain_type='refine',
+    vectorstore=docsearch2
+)
 
 
 
