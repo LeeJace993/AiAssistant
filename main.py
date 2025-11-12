@@ -26,11 +26,20 @@ import detact_run
 from PIL import Image
 
 import nltk
-for pkg in ['punkt', 'punkt_tab', 'averaged_perceptron_tagger_eng']:
-    try:
-        nltk.data.find(f'tokenizers/{pkg}') if "punkt" in pkg else nltk.data.find(f'taggers/{pkg}')
-    except LookupError:
-        nltk.download(pkg)
+import io
+import contextlib
+
+# 屏蔽 nltk.download 的输出
+with contextlib.redirect_stdout(io.StringIO()):
+    for pkg in ['punkt', 'punkt_tab', 'averaged_perceptron_tagger_eng']:
+        try:
+            if "punkt" in pkg:
+                nltk.data.find(f'tokenizers/{pkg}')
+            else:
+                nltk.data.find(f'taggers/{pkg}')
+        except LookupError:
+            nltk.download(pkg)
+
 
 #请输入你的OPENAI_API_KEY
 OPENAI_API_KEY = st.secrets["OPENAI_API_KEY"]
