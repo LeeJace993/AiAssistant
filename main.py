@@ -260,7 +260,7 @@ def page_query():
     if type_input:
         prompt_with_ai=prompt1.format(type=option_type)
         query=type_input
-        formatted_email=llm(prompt_with_ai)
+        formatted_email=llm.invoke(prompt_with_ai)
         st.write(qa1.run(query))
 def get_text():
     input_text=st.text_area(label="",placeholder="你的问题...",key="question_input")
