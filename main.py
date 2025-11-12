@@ -203,7 +203,8 @@ col1,col2=st.columns(2)
 
 with col1:
     st.markdown("专门为老年人设计的智能助手,此智能助手由[LangChain](www.langchain.com) 以及 [OpenAI](https://openai.com)驱动。  "    
-    )  
+    ) 
+    st.markdown("*清华大学 医疗人工智能技术与实践课程*")
     st.markdown("*第16组 殷亦达 张泽艺*")
     st.markdown("本助手有 健康状态分析 问题咨询 舌部诊断三大功能，用户可以通过页面左边的导航栏切换不同功能")
 
@@ -298,7 +299,7 @@ def get_symptoms_from_openai(color_info):
     openai.api_key =OPENAI_API_KEY
     #openai.api_key = os.getenv(OPENAI_API_KEY)
     response = openai.Completion.create(
-        engine="text-davinci-003",
+        engine="gpt-3.5-turbo-instruct",
         prompt=f"{color_info} 症状是什么？",
         max_tokens=100
     )
@@ -309,7 +310,7 @@ def get_suggestions_from_openai(color_info):
     os.environ['OPENAI_API_KEY']=OPENAI_API_KEY
     openai.api_key =OPENAI_API_KEY
     response = openai.Completion.create(
-        engine="text-davinci-003",
+        engine="gpt-3.5-turbo-instruct",
         prompt=f"{color_info} 有什么建议？",
         max_tokens=100
     )
