@@ -2,9 +2,7 @@ from langchain.embeddings.openai import OpenAIEmbeddings
 from langchain.vectorstores import Chroma
 from langchain.text_splitter import CharacterTextSplitter
 ## from langchain import OpenAI, VectorDBQA,PromptTemplate
-from langchain_community.llms import OpenAI
-from langchain.chains import VectorDBQA
-from langchain.prompts import PromptTemplate
+from langchain import OpenAI, VectorDBQA, PromptTemplate
 from langchain.chat_models import ChatOpenAI
 
 
